@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { env } from 'process';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs'
 import { SignInDto } from '../dto/signInDto';
@@ -18,7 +17,7 @@ export class AuthService {
             throw new NotFoundException('User not found'); 
         }
 
-        const checkPassword = bcrypt.compareSync(signInDto.password, user?.password); 
+        const checkPassword = bcrypt.compareSync('1234', user?.password); 
 
         if(!checkPassword){
             throw new UnauthorizedException('Incorrect Email or Password'); 

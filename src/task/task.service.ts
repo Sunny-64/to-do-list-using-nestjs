@@ -1,18 +1,31 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from 'src/db/prisma.service';
+import { PrismaService } from '../db/prisma.service';
+
+interface TaskUpdateData {
+    task?: string | Prisma.StringFieldUpdateOperationsInput;
+    isCompleted?: string | boolean | Prisma.BoolFieldUpdateOperationsInput;
+}
 
 @Injectable()
 export class TaskService {
     constructor(private prisma : PrismaService) {}
 
+    private parseTaskUpdateData(task: TaskUpdateData): Prisma.TaskUpdateInput {
+        return {
+            ...task,
+            isCompleted: typeof task.isCompleted === 'string' ? task.isCompleted === 'true' : task.isCompleted,
+            updatedAt: new Date()
+        };
+    }
+
     // add task
-    async addTask (userId:number, task:string){
+    async addTask (userId:number, task:Prisma.TaskCreateInput){
         const res = await this.prisma.task.create({
             data : {
-                userId, 
-                task
-            }
+                ...task,
+                userId : userId
+            } as Prisma.TaskCreateInput
         }); 
         return res;
     }
@@ -44,12 +57,13 @@ export class TaskService {
 
     // update task with id
     async updateTaskWithId (userId:number, taskId:number, task:Prisma.TaskUpdateInput) {
+        const parsedTask = this.parseTaskUpdateData(task)
         const res = await this.prisma.task.update({
             where : {
                 userId, 
                 id : taskId, 
             }, 
-            data : task
+            data : parsedTask
         }); 
 
         if(!res) {

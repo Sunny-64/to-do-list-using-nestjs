@@ -3,7 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
 import { UserService } from '../user/user.service';
 import { USERS } from '../constants';
-import * as bcrypt from 'bcryptjs'
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);

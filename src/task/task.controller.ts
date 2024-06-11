@@ -10,31 +10,32 @@ export class TaskController {
     
     @Post()
     @UseGuards(AuthGuard)
-    createTask (@Req() req : Request , @Body() task : string) {
-        return this.taskService.addTask(req['user'].userId, task); 
+    createTask (@Req() req : Request , @Body() task : Prisma.TaskCreateInput) {
+        // console.log(req['user'].id)
+        return this.taskService.addTask(req['user'].id, task); 
     }
 
     @Get()
     @UseGuards(AuthGuard)
     getUserTasks (@Req() req : Request) {
-        return this.taskService.findAllTasksOfUser(req['user'].userId); 
+        return this.taskService.findAllTasksOfUser(req['user'].id); 
     }
 
     @Get(':id')
     @UseGuards(AuthGuard)
     getTaskWithId(@Req() req : Request, @Param('id', ParseIntPipe) taskId : number){
-        return this.taskService.findTaskWithId(req['user'].userId, taskId); 
+        return this.taskService.findTaskWithId(req['user'].id, taskId); 
     }
 
     @Patch(':id')
     @UseGuards(AuthGuard)
     updateTaskWithId(@Req() req : Request, @Param('id', ParseIntPipe) taskId : number, @Body() task : Prisma.TaskUpdateInput){
-        return this.taskService.updateTaskWithId(req['user'].userId, taskId, task); 
+        return this.taskService.updateTaskWithId(req['user'].id, taskId, task); 
     }
 
     @Delete(':id')
     @UseGuards(AuthGuard)
     deleteTaskWithId(@Req() req : Request, @Param('id', ParseIntPipe) taskId : number){
-        return this.taskService.deleteTaskWithId(req['user'].userId, taskId); 
+        return this.taskService.deleteTaskWithId(req['user'].id, taskId); 
     }
 }

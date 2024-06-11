@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards, Request } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Prisma, User } from '@prisma/client';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
 
 @Controller('user')
