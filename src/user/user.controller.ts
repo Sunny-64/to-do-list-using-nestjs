@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards, Request } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 
 @Controller('user')
@@ -17,18 +18,28 @@ export class UserController {
         return this.userService.getUsers(); 
     }
 
+    @Get('token')
+    @UseGuards(AuthGuard)
+    getUserWithToken (@Req() req : Request) {
+        return this.userService.getUserWithId(req['user'].id); 
+    }
+
     @Get(':id') 
+    @UseGuards(AuthGuard)
     findUserWithId (@Param('id', ParseIntPipe) id : number) {
         return this.userService.getUserWithId(id); 
     }
 
-    @Patch(':id')
-    updateUser (@Param('id', ParseIntPipe) id : number, @Body() user : Prisma.UserUpdateInput) {
-        return this.userService.updateUserWithId(id, user); 
+  
+    @Patch()
+    @UseGuards(AuthGuard)
+    updateUser (@Req() req : Request, @Body() user : Prisma.UserUpdateInput) {
+        return this.userService.updateUserWithId(req['user'].id, user); 
     }
 
-    @Delete(':id')
-    deleteUser(@Param('id', ParseIntPipe) id : number) {
-        return this.userService.deleteUserWithId(id);
+    @Delete()
+    @UseGuards(AuthGuard)
+    deleteUser(@Req() req : Request) {
+        return this.userService.deleteUserWithId(req['user'].id);
     }
 }

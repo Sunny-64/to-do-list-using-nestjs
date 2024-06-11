@@ -20,9 +20,10 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
-  createdAt DateTime @db.Timestamp()
-  updatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
   Task      Task?
+  status    Boolean  @default(true)
 }
 
 model Task {
@@ -31,6 +32,7 @@ model Task {
   userId      Int      @unique
   task        String
   isCompleted Boolean  @default(false)
-  createdAt   DateTime @db.Timestamp()
-  updatedAt   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  status      Boolean  @default(true)
 }
