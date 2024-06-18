@@ -10,9 +10,12 @@ export class TaskController {
     
     @Post()
     @UseGuards(AuthGuard)
-    createTask (@Req() req : Request , @Body() task : Prisma.TaskCreateInput) {
-        // console.log(req['user'].id)
-        return this.taskService.addTask(req['user'].id, task); 
+    createTask (@Req() req : Request , @Body() task : Prisma.TaskUncheckedCreateInput) {
+        const payload = {
+            ...task, 
+            user : req['user'].id
+        }
+        return this.taskService.addTask(payload); 
     }
 
     @Get()

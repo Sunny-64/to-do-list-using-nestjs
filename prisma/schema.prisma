@@ -22,14 +22,14 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  Task      Task?
+  Task      Task[]
   status    Boolean  @default(true)
 }
 
 model Task {
   id          Int      @id @default(autoincrement())
   user        User     @relation(fields: [userId], references: [id])
-  userId      Int      @unique
+  userId      Int    
   task        String
   isCompleted Boolean  @default(false)
   createdAt   DateTime @default(now())

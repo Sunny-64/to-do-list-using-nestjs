@@ -6,6 +6,7 @@ import { PrismaService } from '../db/prisma.service';
 import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { env } from 'process';
+import { AuthResolver } from './auth.resolver';
 
 @Module({
   imports : [
@@ -16,7 +17,7 @@ import { env } from 'process';
       signOptions: { expiresIn: '24h' },
     }),
   ],
-  providers: [PrismaService, AuthService, UserService],
+  providers: [PrismaService, AuthService, UserService, AuthResolver],
   controllers: [AuthController]
 })
 export class AuthModule {}

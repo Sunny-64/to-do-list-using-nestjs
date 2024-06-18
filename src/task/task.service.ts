@@ -1,11 +1,14 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, Task } from '@prisma/client';
 import { PrismaService } from '../db/prisma.service';
+import { CreateTaskInput } from './task.input';
 
 interface TaskUpdateData {
     task?: string | Prisma.StringFieldUpdateOperationsInput;
     isCompleted?: string | boolean | Prisma.BoolFieldUpdateOperationsInput;
 }
+
+type TaskCreateInputWithoutUser = Omit<Prisma.TaskCreateInput, 'user'>
 
 @Injectable()
 export class TaskService {
@@ -20,12 +23,11 @@ export class TaskService {
     }
 
     // add task
-    async addTask (userId:number, task:Prisma.TaskCreateInput){
+    async addTask (task:Prisma.TaskUncheckedCreateInput){
         const res = await this.prisma.task.create({
             data : {
                 ...task,
-                userId : userId
-            } as Prisma.TaskCreateInput
+            } 
         }); 
         return res;
     }
